@@ -1,0 +1,121 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run weekly on Sundays at 2 AM UTC
+    - cron: '0 2 * * 0'
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  complexity:
+    name: Code Complexity Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        components: clippy
+    
+    - name: Install cargo-geiger
+      run: cargo install cargo-geiger
+    
+    - name: Run cargo-geiger
+      run: cargo geiger --quiet
+    
+    - name: Install cargo-deny
+      run: cargo install cargo-deny
+    
+    - name: Run cargo-deny
+      run: cargo deny check
+
+  coverage:
+    name: Test Coverage
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+    
+    - name: Install cargo-tarpaulin
+      run: cargo install cargo-tarpaulin
+    
+    - name: Run tests with coverage
+      run: cargo tarpaulin --verbose --all-features --workspace
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./target/tarpaulin/tarpaulin-report.xml
+        fail_ci_if_error: false
+
+  benchmarks:
+    name: Performance Benchmarks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+    
+    - name: Install cargo-bench
+      run: cargo install cargo-bench
+    
+    - name: Run benchmarks
+      run: |
+        if [ -f "benches/Cargo.toml" ]; then
+          cargo bench
+        else
+          echo "No benchmarks found, skipping..."
+        fi
+    
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v3
+      with:
+        name: benchmark-results
+        path: target/criterion/
+        retention-days: 30
+
+  dead-code:
+    name: Dead Code Detection
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+    
+    - name: Install cargo-udeps
+      run: cargo install cargo-udeps
+    
+    - name: Check for unused dependencies
+      run: cargo +nightly udeps
+
+  license:
+    name: License Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+    
+    - name: Install cargo-deny
+      run: cargo install cargo-deny
+    
+    - name: Check licenses
+      run: cargo deny check licenses
