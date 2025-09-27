@@ -1,122 +1,122 @@
-# Enigma-Simulator in Rust
+# Enigma Simulator in Rust
 
-Ein vollständiger Enigma-Simulator in Rust mit sowohl einer grafischen Benutzeroberfläche (GUI) als auch einem Command-Line-Interface (CLI). Dieser Simulator implementiert die historische Enigma-Maschine mit allen wichtigen Komponenten: Rotoren, Reflektor und Steckerbrett.
+A complete Enigma simulator in Rust with both a graphical user interface (GUI) and a command-line interface (CLI). This simulator implements the historical Enigma machine with all essential components: rotors, reflector, and plugboard.
 
 ## 🚀 Features
 
-- **Vollständige Enigma-Implementierung** mit historisch korrekten Rotoren und Reflektoren
-- **Grafische Benutzeroberfläche** mit egui/eframe für intuitive Bedienung
-- **Command-Line-Interface** für automatisierte Verarbeitung
-- **Detailliertes Logging** mit Schritt-für-Schritt-Nachverfolgung der Verschlüsselung
-- **Konfigurierbare Komponenten** (Rotoren, Reflektor, Steckerbrett)
-- **Umfassende Tests** für Verifikation der Korrektheit
+- **Complete Enigma Implementation** with historically accurate rotors and reflectors
+- **Graphical User Interface** with egui/eframe for intuitive operation
+- **Command-Line Interface** for automated processing
+- **Detailed Logging** with step-by-step encryption tracking
+- **Configurable Components** (rotors, reflector, plugboard)
+- **Comprehensive Tests** for correctness verification
 
-## 📋 Voraussetzungen
+## 📋 Prerequisites
 
-- Rust 1.70 oder höher
-- Windows, Linux oder macOS
+- Rust 1.70 or higher
+- Windows, Linux, or macOS
 
-## 🛠️ Installation und Build
+## 🛠️ Installation and Build
 
-1. **Repository klonen:**
+1. **Clone the repository:**
 ```bash
 git clone <repository-url>
 cd enigma_rs
 ```
 
-2. **Dependencies installieren:**
+2. **Install dependencies:**
 ```bash
 cargo build
 ```
 
-3. **Tests ausführen:**
+3. **Run tests:**
 ```bash
 cargo test
 ```
 
-4. **Anwendung starten:**
+4. **Start the application:**
 ```bash
-# GUI-Modus (Standard)
+# GUI mode (default)
 cargo run
 
-# CLI-Modus
+# CLI mode
 cargo run -- --cli
 ```
 
-## 🖥️ Grafische Benutzeroberfläche (GUI)
+## 🖥️ Graphical User Interface (GUI)
 
-Die GUI startet standardmäßig und bietet eine intuitive Bedienung:
+The GUI starts by default and provides intuitive operation:
 
-### Hauptfunktionen
+### Main Features
 
-1. **Textverarbeitung:**
-   - Eingabefeld für zu verarbeitenden Text
-   - Auswahl zwischen Verschlüsselung und Entschlüsselung
-   - Sofortige Anzeige des Ergebnisses
-   - Anzeige der aktuellen Rotorpositionen
+1. **Text Processing:**
+   - Input field for text to be processed
+   - Choice between encryption and decryption
+   - Immediate display of results
+   - Display of current rotor positions
 
-2. **Konfiguration:**
-   - **Rotoren:** Auswahl aus 5 historischen Rotoren (I, II, III, IV, V)
-   - **Rotorpositionen:** Einstellung der Grundstellung jedes Rotors (A-Z)
-   - **Ringstellungen:** Konfiguration der Ringstellung (A-Z)
-   - **Reflektor:** Auswahl zwischen Reflektoren A, B und C
-   - **Steckerbrett:** Konfiguration von Buchstabenverbindungen
+2. **Configuration:**
+   - **Rotors:** Selection from 5 historical rotors (I, II, III, IV, V)
+   - **Rotor Positions:** Setting the initial position of each rotor (A-Z)
+   - **Ring Settings:** Configuration of ring setting (A-Z)
+   - **Reflector:** Choice between reflectors A, B, and C
+   - **Plugboard:** Configuration of letter connections
 
-3. **Log-Anzeige:**
-   - Detaillierte Protokollierung aller Verschlüsselungsschritte
-   - Farbkodierte Log-Level (Info, Warn, Error)
-   - Auto-Scroll-Funktion
-   - Log-Löschfunktion
+3. **Log Display:**
+   - Detailed logging of all encryption steps
+   - Color-coded log levels (Info, Warn, Error)
+   - Auto-scroll function
+   - Log clear function
 
-### GUI-Bedienung
+### GUI Operation
 
-1. **Konfiguration anpassen:** Wählen Sie die gewünschten Rotoren, Positionen und Verbindungen
-2. **"Konfiguration anwenden" klicken:** Die Maschine wird mit den neuen Einstellungen initialisiert
-3. **Text eingeben:** Geben Sie den zu verarbeitenden Text ein
-4. **Modus wählen:** Verschlüsseln oder Entschlüsseln
-5. **"Verarbeiten" klicken:** Das Ergebnis wird angezeigt und im Log protokolliert
+1. **Adjust Configuration:** Select desired rotors, positions, and connections
+2. **Click "Apply Configuration":** The machine is initialized with the new settings
+3. **Enter Text:** Enter the text to be processed
+4. **Choose Mode:** Encrypt or decrypt
+5. **Click "Process":** The result is displayed and logged
 
-## 💻 Command-Line-Interface (CLI)
+## 💻 Command-Line Interface (CLI)
 
-Das CLI ermöglicht die automatisierte Verarbeitung von Texten:
+The CLI enables automated text processing:
 
-### Grundlegende Verwendung
+### Basic Usage
 
 ```bash
-# Verschlüsseln
+# Encrypt
 cargo run -- encrypt "HELLO WORLD" --positions "ABC" --rings "DEF"
 
-# Entschlüsseln
+# Decrypt
 cargo run -- decrypt "ENCRYPTED TEXT" --positions "ABC" --rings "DEF"
 ```
 
-### CLI-Optionen
+### CLI Options
 
-#### Verschlüsselung (`encrypt`)
+#### Encryption (`encrypt`)
 ```bash
-cargo run -- encrypt <TEXT> [OPTIONEN]
+cargo run -- encrypt <TEXT> [OPTIONS]
 ```
 
-#### Entschlüsselung (`decrypt`)
+#### Decryption (`decrypt`)
 ```bash
-cargo run -- decrypt <TEXT> [OPTIONEN]
+cargo run -- decrypt <TEXT> [OPTIONS]
 ```
 
-#### Verfügbare Optionen:
-- `--positions, -P`: Rotorpositionen (z.B. "ABC") [Standard: "AAA"]
-- `--rings, -r`: Ringstellungen (z.B. "DEF") [Standard: "AAA"]
-- `--plugboard, -p`: Steckerbrett-Verbindungen (z.B. "AB CD EF")
-- `--rotors, -R`: Rotortypen (z.B. "I,II,III") [Standard: "I,II,III"]
-- `--reflector, -F`: Reflektortyp (A, B, oder C) [Standard: "B"]
-- `--verbose, -v`: Detaillierte Log-Ausgabe
+#### Available Options:
+- `--positions, -P`: Rotor positions (e.g. "ABC") [Default: "AAA"]
+- `--rings, -r`: Ring settings (e.g. "DEF") [Default: "AAA"]
+- `--plugboard, -p`: Plugboard connections (e.g. "AB CD EF")
+- `--rotors, -R`: Rotor types (e.g. "I,II,III") [Default: "I,II,III"]
+- `--reflector, -F`: Reflector type (A, B, or C) [Default: "B"]
+- `--verbose, -v`: Detailed log output
 
-### CLI-Beispiele
+### CLI Examples
 
 ```bash
-# Einfache Verschlüsselung
+# Simple encryption
 cargo run -- encrypt "SECRET MESSAGE"
 
-# Mit benutzerdefinierten Einstellungen
+# With custom settings
 cargo run -- encrypt "HELLO" \
   --positions "XYZ" \
   --rings "ABC" \
@@ -124,7 +124,7 @@ cargo run -- encrypt "HELLO" \
   --reflector "C" \
   --plugboard "AB CD EF GH"
 
-# Entschlüsselung mit gleichen Einstellungen
+# Decryption with same settings
 cargo run -- decrypt "ENCRYPTED" \
   --positions "XYZ" \
   --rings "ABC" \
@@ -132,173 +132,223 @@ cargo run -- decrypt "ENCRYPTED" \
   --reflector "C" \
   --plugboard "AB CD EF GH"
 
-# Mit detailliertem Logging
+# With detailed logging
 cargo run -- --verbose encrypt "TEST" --positions "AAA"
 ```
 
-## 🔧 Technische Details
+## 🔧 Technical Details
 
-### Projektstruktur
+### Project Structure
 
 ```
 src/
-├── main.rs           # Einstiegspunkt (GUI/CLI-Switch)
-├── machine.rs        # Enigma-Hauptlogik
-├── rotor.rs          # Rotor-Implementierung
-├── reflector.rs      # Reflektor-Implementierung
-├── plugboard.rs      # Steckerbrett-Implementierung
-├── gui.rs            # GUI mit egui/eframe
-└── utils.rs          # Hilfsfunktionen
+├── main.rs           # Entry point (GUI/CLI switch)
+├── machine.rs        # Enigma main logic
+├── rotor.rs          # Rotor implementation
+├── reflector.rs      # Reflector implementation
+├── plugboard.rs      # Plugboard implementation
+├── gui.rs            # GUI with egui/eframe
+└── utils.rs          # Utility functions
 
 tests/
-└── enigma_test.rs    # Umfassende Tests
+└── enigma_test.rs    # Comprehensive tests
 
-README.md             # Diese Datei
-Cargo.toml           # Dependencies und Konfiguration
+README.md             # This file
+Cargo.toml           # Dependencies and configuration
 ```
 
-### Enigma-Algorithmus
+### Enigma Algorithm
 
-Die Enigma-Maschine funktioniert in folgenden Schritten:
+The Enigma machine works in the following steps:
 
-1. **Steckerbrett (Vorwärts):** Austausch der Buchstaben nach konfigurierten Regeln
-2. **Rotor-Drehung:** Automatische Weiterleitung der Rotoren vor jeder Verarbeitung
-3. **Rotoren (Vorwärts):** Signal durchläuft die drei Rotoren von rechts nach links
-4. **Reflektor:** Signal wird zurückgespiegelt
-5. **Rotoren (Rückwärts):** Signal durchläuft die Rotoren von links nach rechts
-6. **Steckerbrett (Rückwärts):** Erneuter Austausch nach Steckerbrett-Regeln
+1. **Plugboard (Forward):** Exchange letters according to configured rules
+2. **Rotor Rotation:** Automatic advancement of rotors before each processing
+3. **Rotors (Forward):** Signal passes through the three rotors from right to left
+4. **Reflector:** Signal is reflected back
+5. **Rotors (Backward):** Signal passes through the rotors from left to right
+6. **Plugboard (Backward):** Another exchange according to plugboard rules
 
-### Rotor-Drehung
+### Rotor Rotation
 
-- **Rechter Rotor:** Dreht sich bei jedem Zeichen
-- **Mittlerer Rotor:** Dreht sich, wenn der rechte an der Kerbe ist
-- **Linker Rotor:** Dreht sich, wenn der mittlere an der Kerbe ist
-- **Doppelschritt:** Mittlerer Rotor dreht sich zusätzlich, wenn er selbst an der Kerbe ist
+- **Right Rotor:** Rotates with each character
+- **Middle Rotor:** Rotates when the right rotor is at the notch
+- **Left Rotor:** Rotates when the middle rotor is at the notch
+- **Double Step:** Middle rotor rotates additionally when it itself is at the notch
 
-### Historische Rotoren
+### Historical Rotors
 
-| Rotor | Verdrahtung | Kerbe |
-|-------|-------------|-------|
+| Rotor | Wiring | Notch |
+|-------|--------|-------|
 | I     | EKMFLGDQVZNTOWYHXUSPAIBRCJ | Q |
 | II    | AJDKSIRUXBLHWTMCQGZNPYFVOE | E |
 | III   | BDFHJLCPRTXVZNYEIWGAKMUSQO | V |
 | IV    | ESOVPZJAYQUIRHXLNFTGKDCMWB | J |
 | V     | VZBRGITYUPSDNHLXAWMJQOFECK | Z |
 
-### Reflektoren
+### Reflectors
 
-| Reflektor | Verdrahtung |
-|-----------|-------------|
+| Reflector | Wiring |
+|-----------|--------|
 | A         | EJMZALYXVBWFCRQUONTSPIKHGD |
 | B         | YRUHQSLDPXNGOKMIEBFZCWVJAT |
 | C         | FVPJIAOYEDRZXWGCTKUQSBNMHL |
 
-## 📊 Logging-System
+## 📊 Logging System
 
-Das Projekt nutzt das `log`/`env_logger`-Ökosystem für strukturierte Log-Ausgaben:
+The project uses the `log`/`env_logger` ecosystem for structured log output:
 
-### Log-Level
-- **INFO:** Allgemeine Informationen über Verarbeitungsschritte
-- **DEBUG:** Detaillierte Informationen über Konfiguration
-- **TRACE:** Schritt-für-Schritt-Verschlüsselungsdetails
-- **WARN:** Warnungen bei ungewöhnlichen Situationen
-- **ERROR:** Fehler und Probleme
+### Log Levels
+- **INFO:** General information about processing steps
+- **DEBUG:** Detailed information about configuration
+- **TRACE:** Step-by-step encryption details
+- **WARN:** Warnings for unusual situations
+- **ERROR:** Errors and problems
 
-### Log-Integration in GUI
-- Alle Log-Einträge werden in der GUI angezeigt
-- Farbkodierung nach Log-Level
-- Zeitstempel für jeden Eintrag
-- Auto-Scroll und manuelle Navigation möglich
+### Log Integration in GUI
+- All log entries are displayed in the GUI
+- Color coding by log level
+- Timestamps for each entry
+- Auto-scroll and manual navigation possible
 
-### CLI-Logging
-- Standardmäßig INFO-Level
-- `--verbose` für DEBUG/TRACE-Level
-- Zeitstempel in allen Ausgaben
+### CLI Logging
+- INFO level by default
+- `--verbose` for DEBUG/TRACE levels
+- Timestamps in all output
 
 ## 🧪 Tests
 
-Das Projekt enthält umfassende Tests, die die Korrektheit der Implementierung sicherstellen:
+The project contains comprehensive tests that ensure the correctness of the implementation:
 
 ```bash
-# Alle Tests ausführen
+# Run all tests
 cargo test
 
-# Tests mit Ausgabe
+# Run tests with output
 cargo test -- --nocapture
 
-# Spezifische Tests
+# Run specific tests
 cargo test test_encrypt_decrypt_symmetry
 ```
 
-### Test-Abdeckung
-- **Symmetrie-Tests:** Ver- und Entschlüsselung müssen identisch sein
-- **Konfiguration-Tests:** Verschiedene Rotor-, Reflektor- und Steckerbrett-Konfigurationen
-- **Rotor-Drehung:** Korrekte Weiterleitung und Positionierung
-- **Längere Texte:** Verarbeitung von mehreren Zeichen
-- **Grenzfälle:** Spezielle Konfigurationen und Eingaben
+### Test Coverage
+- **Symmetry Tests:** Encryption and decryption must be identical
+- **Configuration Tests:** Various rotor, reflector, and plugboard configurations
+- **Rotor Rotation:** Correct advancement and positioning
+- **Longer Texts:** Processing of multiple characters
+- **Edge Cases:** Special configurations and inputs
 
-## 🔍 Debugging und Entwicklung
+## 🔍 Debugging and Development
 
-### Detailliertes Logging aktivieren
+### Enable Detailed Logging
 ```bash
-# In der GUI automatisch aktiv
-# Im CLI mit --verbose
+# Automatically active in GUI
+# In CLI with --verbose
 cargo run -- --verbose encrypt "TEST"
 
-# Umgebungsvariable setzen
+# Set environment variable
 RUST_LOG=trace cargo run
 ```
 
-### Entwicklung
+### Development
 ```bash
-# Debug-Build
+# Debug build
 cargo build
 
-# Release-Build
+# Release build
 cargo build --release
 
-# Mit Optimierungen
+# With optimizations
 cargo run --release
 ```
 
-## 📚 Erweiterungen
+## 📚 Extensions
 
-Das Projekt ist so strukturiert, dass Erweiterungen einfach möglich sind:
+The project is structured to make extensions easy:
 
-### Neue Rotoren hinzufügen
-1. Verdrahtung in `rotor.rs` definieren
-2. Factory-Funktion erstellen
-3. In `available_rotors()` registrieren
+### Adding New Rotors
+1. Define wiring in `rotor.rs`
+2. Create factory function
+3. Register in `available_rotors()`
 
-### Neue Reflektoren hinzufügen
-1. Verdrahtung in `reflector.rs` definieren
-2. Factory-Funktion erstellen
-3. In `available_reflectors()` registrieren
+### Adding New Reflectors
+1. Define wiring in `reflector.rs`
+2. Create factory function
+3. Register in `available_reflectors()`
 
-### GUI-Erweiterungen
-- Neue Konfigurationsoptionen in `gui.rs`
-- Zusätzliche Anzeige-Panels
-- Export/Import von Konfigurationen
+### GUI Extensions
+- New configuration options in `gui.rs`
+- Additional display panels
+- Export/import of configurations
 
-## 🤝 Beitragen
+## 🤝 Contributing
 
-Beiträge sind willkommen! Bitte:
+Contributions are welcome! Please:
 
-1. Fork des Repositories erstellen
-2. Feature-Branch erstellen
-3. Tests für neue Funktionalität schreiben
-4. Pull Request einreichen
+1. Fork the repository
+2. Create a feature branch
+3. Write tests for new functionality
+4. Submit a pull request
 
-## 📄 Lizenz
+## 📚 Sources and References
 
-Dieses Projekt steht unter der MIT-Lizenz.
+### Historical Documentation
 
-## 🏛️ Historischer Kontext
+- **Enigma Machine Specifications**: [Cryptomuseum.com](https://www.cryptomuseum.com/crypto/enigma/index.htm)
+- **Enigma Rotor Wiring Tables**: [Wikipedia - Enigma Rotor Details](https://en.wikipedia.org/wiki/Enigma_rotor_details)
+- **Enigma Reflector Specifications**: [Cipher Machines and Cryptology](http://users.telenet.be/d.rijmenants/en/enigmaspec.htm)
+- **Historical Enigma Configurations**: [Tony Sale's Codes and Ciphers](https://www.codesandciphers.org.uk/enigma/index.htm)
 
-Die Enigma-Maschine war eine elektromechanische Verschlüsselungsmaschine, die während des Zweiten Weltkriegs von der deutschen Wehrmacht verwendet wurde. Ihre Entschlüsselung durch die Alliierten war ein entscheidender Faktor für den Kriegsverlauf.
+### Technical Implementation
 
-Dieser Simulator ist eine pädagogische Implementierung zur Veranschaulichung der Funktionsweise der Enigma-Maschine und der Grundlagen der Kryptographie.
+- **Rust Programming Language**: [rust-lang.org](https://www.rust-lang.org/)
+- **egui GUI Framework**: [github.com/emilk/egui](https://github.com/emilk/egui)
+- **eframe GUI Backend**: [docs.rs/eframe](https://docs.rs/eframe/)
+- **clap CLI Framework**: [github.com/clap-rs/clap](https://github.com/clap-rs/clap)
+- **log/env_logger Logging**: [docs.rs/log](https://docs.rs/log/)
+
+### Algorithm and Cryptography
+
+- **Enigma Algorithm Explanation**: [Practical Cryptography](https://practicalcryptography.com/ciphers/enigma-cipher/)
+- **Enigma Stepping Mechanism**: [Crypto Stack Exchange](https://crypto.stackexchange.com/questions/281/can-someone-explain-the-enigma-algorithm)
+- **Rotor Carry-Over Logic**: [Enigma Machine Mechanics](https://www.cryptomuseum.com/crypto/enigma/working.htm)
+
+### Educational Resources
+
+- **Understanding Enigma**: [Khan Academy Cryptography](https://www.khanacademy.org/computing/computer-science/cryptography)
+- **Historical Context**: [Imperial War Museums](https://www.iwm.org.uk/history/how-alan-turing-cracked-the-enigma-code)
+- **Bletchley Park Resources**: [bletchleypark.org.uk](https://bletchleypark.org.uk/)
+
+### Code References
+
+- **Rust Best Practices**: [doc.rust-lang.org/book](https://doc.rust-lang.org/book/)
+- **egui Documentation**: [docs.rs/egui](https://docs.rs/egui/)
+- **Conventional Commits**: [conventionalcommits.org](https://www.conventionalcommits.org/)
+
+### Historical Data
+
+The rotor wiring and reflector specifications used in this simulator are based on historically documented Enigma machines:
+
+- **Rotors I-V**: Standard Wehrmacht rotors with authentic wiring
+- **Reflectors A, B, C**: Original Wehrmacht reflectors
+- **Ring Settings and Notches**: Historically correct configurations
+
+### Image Sources and Icons
+
+- **Emoji Icons**: Unicode Standard Emoji (used in GUI)
+- **Enigma Machine Images**: Public Domain Historical Photographs
 
 ---
 
-**Hinweis:** Dieser Simulator dient ausschließlich Bildungszwecken und historischen Studien. Die hier implementierten Algorithmen sind historisch und nicht für moderne Sicherheitsanwendungen geeignet.
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 🏛️ Historical Context
+
+The Enigma machine was an electromechanical encryption device used by the German Wehrmacht during World War II. Its decryption by the Allies was a decisive factor in the course of the war.
+
+This simulator is an educational implementation to illustrate the workings of the Enigma machine and the fundamentals of cryptography.
+
+---
+
+**Note:** This simulator is intended exclusively for educational purposes and historical studies. The algorithms implemented here are historical and not suitable for modern security applications.
