@@ -1,4 +1,4 @@
-name: Auto Label
+gname: Auto Label
 
 on:
   issues:
