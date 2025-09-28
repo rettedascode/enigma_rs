@@ -70,7 +70,7 @@ pub fn generate_random_plugboard() -> String {
     use rand::Rng;
     use std::collections::HashSet;
 
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     let mut used = HashSet::new();
     let mut connections = Vec::new();
 
@@ -88,7 +88,7 @@ pub fn generate_random_plugboard() -> String {
             .collect();
 
         if available.len() > 1 {
-            let partner = available[rng.gen_range(0..available.len())];
+            let partner = available[rng.random_range(0..available.len())];
             if partner != letter {
                 connections.push(format!("{}{}", letter, partner));
                 used.insert(letter);

@@ -143,10 +143,10 @@ impl EnigmaApp {
     /// Generates random rotor positions
     fn generate_random_rotor_positions(&mut self) {
         use rand::Rng;
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         for i in 0..3 {
-            let random_letter = (b'A' + rng.gen_range(0..26)) as char;
+            let random_letter = (b'A' + rng.random_range(0..26)) as char;
             self.rotor_positions[i] = random_letter.to_string();
         }
 
@@ -162,10 +162,10 @@ impl EnigmaApp {
     /// Generates random ring settings
     fn generate_random_ring_settings(&mut self) {
         use rand::Rng;
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         for i in 0..3 {
-            let random_letter = (b'A' + rng.gen_range(0..26)) as char;
+            let random_letter = (b'A' + rng.random_range(0..26)) as char;
             self.ring_settings[i] = random_letter.to_string();
         }
 
@@ -181,22 +181,22 @@ impl EnigmaApp {
     /// Generiert zufällige Steckerbrett-Verbindungen
     fn generate_random_plugboard(&mut self) {
         use rand::Rng;
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let mut connections = Vec::new();
         let mut used = std::collections::HashSet::new();
 
         // Generiere 5-10 zufällige Verbindungen
-        let num_connections = rng.gen_range(5..=10);
+        let num_connections = rng.random_range(5..=10);
 
         for _ in 0..num_connections {
-            let mut first = (b'A' + rng.gen_range(0..26)) as char;
+            let mut first = (b'A' + rng.random_range(0..26)) as char;
             while used.contains(&first) {
-                first = (b'A' + rng.gen_range(0..26)) as char;
+                first = (b'A' + rng.random_range(0..26)) as char;
             }
 
-            let mut second = (b'A' + rng.gen_range(0..26)) as char;
+            let mut second = (b'A' + rng.random_range(0..26)) as char;
             while second == first || used.contains(&second) {
-                second = (b'A' + rng.gen_range(0..26)) as char;
+                second = (b'A' + rng.random_range(0..26)) as char;
             }
 
             used.insert(first);
