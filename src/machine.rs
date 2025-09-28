@@ -1,7 +1,7 @@
-//! Enigma-Maschine Hauptimplementierung
+//! Enigma Machine Main Implementation
 //!
-//! Dieses Modul enthält die Hauptlogik der Enigma-Maschine, die alle Komponenten
-//! (Rotoren, Reflektor, Steckerbrett) zusammenführt.
+//! This module contains the main logic of the Enigma machine that combines all components
+//! (rotors, reflector, plugboard).
 
 use crate::plugboard::Plugboard;
 use crate::reflector::Reflector;
@@ -9,7 +9,7 @@ use crate::rotor::Rotor;
 use crate::utils::{clean_text, letter_to_index};
 use log::{debug, info, trace};
 
-/// Repräsentiert eine vollständige Enigma-Maschine
+/// Represents a complete Enigma machine
 #[derive(Debug)]
 pub struct EnigmaMachine {
     /// Die drei Rotoren (links, mitte, rechts)
@@ -38,17 +38,17 @@ impl EnigmaMachine {
         }
     }
 
-    /// Verschlüsselt einen einzelnen Buchstaben
+    /// Encrypts a single character
     ///
     /// # Arguments
-    /// * `input` - Das zu verschlüsselnde Zeichen
+    /// * `input` - The character to encrypt
     ///
     /// # Returns
-    /// * Das verschlüsselte Zeichen
+    /// * The encrypted character
     pub fn encrypt_char(&mut self, input: char) -> char {
         debug!("=== Verschlüsselung von '{}' ===", input);
 
-        // 1. Steckerbrett (Vorwärts)
+        // 1. Plugboard (forward)
         let after_plugboard = self.plugboard.process(input);
         trace!(
             "Nach Steckerbrett (vorwärts): {} -> {}",
@@ -56,10 +56,10 @@ impl EnigmaMachine {
             after_plugboard
         );
 
-        // 2. Rotoren drehen (vor der Verschlüsselung)
+        // 2. Rotate rotors (before encryption)
         self.step_rotors();
 
-        // 3. Durch die Rotoren (vorwärts)
+        // 3. Through the rotors (forward)
         let mut signal = after_plugboard;
         for (i, rotor) in self.rotors.iter().enumerate() {
             signal = rotor.forward(signal);
@@ -70,13 +70,13 @@ impl EnigmaMachine {
         signal = self.reflector.reflect(signal);
         trace!("Nach Reflektor: {}", signal);
 
-        // 5. Durch die Rotoren (rückwärts)
+        // 5. Through the rotors (backward)
         for (i, rotor) in self.rotors.iter().rev().enumerate() {
             signal = rotor.backward(signal);
             trace!("Nach Rotor {} (rückwärts): {}", 3 - i, signal);
         }
 
-        // 6. Steckerbrett (Rückwärts)
+        // 6. Plugboard (backward)
         let final_output = self.plugboard.process(signal);
         trace!(
             "Nach Steckerbrett (rückwärts): {} -> {}",
@@ -91,13 +91,13 @@ impl EnigmaMachine {
         final_output
     }
 
-    /// Verschlüsselt einen kompletten Text
+    /// Encrypts a complete text
     ///
     /// # Arguments
-    /// * `text` - Der zu verschlüsselnde Text
+    /// * `text` - The text to encrypt
     ///
     /// # Returns
-    /// * Der verschlüsselte Text
+    /// * The encrypted text
     pub fn encrypt(&mut self, text: &str) -> String {
         info!("Starte Verschlüsselung von: '{}'", text);
         let clean_input = clean_text(text);

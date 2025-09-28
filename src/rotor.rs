@@ -1,40 +1,40 @@
-//! Rotor-Implementierung für die Enigma-Maschine
+//! Rotor implementation for the Enigma machine
 //!
-//! Dieses Modul definiert die Struktur und Funktionalität der Enigma-Rotoren.
-//! Jeder Rotor hat eine Verdrahtung, eine Ringstellung und eine Grundstellung.
+//! This module defines the structure and functionality of Enigma rotors.
+//! Each rotor has a wiring, a ring setting, and a position.
 
 use crate::utils::{index_to_letter, letter_to_index};
 use log::{debug, trace};
 
-/// Repräsentiert einen einzelnen Enigma-Rotor
+/// Represents a single Enigma rotor
 #[derive(Debug, Clone)]
 pub struct Rotor {
-    /// Die Verdrahtung des Rotors (Substitution von A-Z)
+    /// The rotor's wiring (substitution of A-Z)
     pub wiring: [usize; 26],
-    /// Die Umkehr-Verdrahtung für die Rückwärtsrichtung
+    /// The reverse wiring for backward direction
     pub reverse_wiring: [usize; 26],
-    /// Die Ringstellung (Ringstellung)
+    /// The ring setting
     pub ring_setting: usize,
-    /// Die aktuelle Grundstellung
+    /// The current position
     pub position: usize,
-    /// Der Buchstabe an der Kerbe (für die Weiterleitung)
+    /// The letter at the notch (for advancement)
     pub notch: usize,
-    /// Der Name des Rotors (z.B. "I", "II", "III")
+    /// The name of the rotor (e.g. "I", "II", "III")
     pub name: String,
 }
 
 impl Rotor {
-    /// Erstellt einen neuen Rotor mit den angegebenen Parametern
+    /// Creates a new rotor with the specified parameters
     ///
     /// # Arguments
-    /// * `wiring` - Die Verdrahtung als String (z.B. "EKMFLGDQVZNTOWYHXUSPAIBRCJ")
-    /// * `notch` - Der Kerbenbuchstabe
-    /// * `name` - Der Name des Rotors
-    /// * `ring_setting` - Die Ringstellung (0-25)
-    /// * `position` - Die Grundstellung (0-25)
+    /// * `wiring` - The wiring as a string (e.g. "EKMFLGDQVZNTOWYHXUSPAIBRCJ")
+    /// * `notch` - The notch letter
+    /// * `name` - The name of the rotor
+    /// * `ring_setting` - The ring setting (0-25)
+    /// * `position` - The position (0-25)
     ///
     /// # Returns
-    /// * `Result<Rotor, String>` - Der erstellte Rotor oder ein Fehler
+    /// * `Result<Rotor, String>` - The created rotor or an error
     pub fn new(
         wiring: &str,
         notch: char,
@@ -43,11 +43,11 @@ impl Rotor {
         position: usize,
     ) -> Result<Self, String> {
         if wiring.len() != 26 {
-            return Err("Verdrahtung muss genau 26 Zeichen lang sein".to_string());
+            return Err("Wiring must be exactly 26 characters long".to_string());
         }
 
         if ring_setting >= 26 || position >= 26 {
-            return Err("Ringstellung und Position müssen zwischen 0 und 25 liegen".to_string());
+            return Err("Ring setting and position must be between 0 and 25".to_string());
         }
 
         let notch_index = letter_to_index(notch)
@@ -73,13 +73,13 @@ impl Rotor {
         })
     }
 
-    /// Verschlüsselt ein Zeichen in Vorwärtsrichtung
+    /// Encrypts a character in forward direction
     ///
     /// # Arguments
     /// * `input` - Das Eingabezeichen
     ///
     /// # Returns
-    /// * Das verschlüsselte Zeichen
+    /// * The encrypted character
     pub fn forward(&self, input: char) -> char {
         let input_index = letter_to_index(input).unwrap_or(0) as i32;
         let position = self.position as i32;
@@ -100,13 +100,13 @@ impl Rotor {
         index_to_letter(output_index).unwrap_or('A')
     }
 
-    /// Verschlüsselt ein Zeichen in Rückwärtsrichtung
+    /// Encrypts a character in backward direction
     ///
     /// # Arguments
     /// * `input` - Das Eingabezeichen
     ///
     /// # Returns
-    /// * Das verschlüsselte Zeichen
+    /// * The encrypted character
     pub fn backward(&self, input: char) -> char {
         let input_index = letter_to_index(input).unwrap_or(0) as i32;
         let position = self.position as i32;
@@ -131,7 +131,7 @@ impl Rotor {
     /// Dreht den Rotor um eine Position weiter
     ///
     /// # Returns
-    /// * `true` - Wenn der Rotor an der Kerbe vorbeigedreht ist (Weiterleitung auslösen)
+    /// * `true` - If the rotor has passed the notch (trigger advancement)
     /// * `false` - Normale Drehung
     pub fn step(&mut self) -> bool {
         let was_at_notch = self.position == self.notch;
@@ -169,7 +169,7 @@ impl Rotor {
         }
     }
 
-    /// Gibt die aktuelle Position als Buchstabe zurück
+    /// Returns the current position as a letter
     ///
     /// # Returns
     /// * Der Buchstabe der aktuellen Position
@@ -177,7 +177,7 @@ impl Rotor {
         index_to_letter(self.position).unwrap_or('A')
     }
 
-    /// Gibt die Ringstellung als Buchstabe zurück
+    /// Returns the ring setting as a letter
     ///
     /// # Returns
     /// * Der Buchstabe der Ringstellung
@@ -245,7 +245,7 @@ pub mod rotors {
         )
     }
 
-    /// Gibt alle verfügbaren Rotoren zurück
+    /// Returns all available rotors
     pub fn available_rotors() -> Vec<(&'static str, fn(usize, usize) -> Result<Rotor, String>)> {
         vec![
             ("I", rotor_i as fn(usize, usize) -> Result<Rotor, String>),

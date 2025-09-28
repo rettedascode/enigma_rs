@@ -1,9 +1,9 @@
-//! Enigma-Simulator - Hauptprogramm
+//! Enigma Simulator - Main Program
 //!
-//! Dieses Programm implementiert eine vollständige Enigma-Maschine mit sowohl
-//! einer grafischen Benutzeroberfläche als auch einem Command-Line-Interface.
+//! This program implements a complete Enigma machine with both
+//! a graphical user interface and a command-line interface.
 
-// Verwende die Module aus der Library
+// Use modules from the library
 use enigma_rs::gui;
 use enigma_rs::machine::factory;
 use enigma_rs::utils::clean_text;
@@ -12,82 +12,82 @@ use clap::{Parser, Subcommand};
 use env_logger::{Builder, Env};
 use log::{error, info};
 
-/// CLI-Argumente für den Enigma-Simulator
+/// CLI arguments for the Enigma simulator
 #[derive(Parser)]
 #[command(name = "enigma_rs")]
-#[command(about = "Ein Enigma-Simulator in Rust")]
+#[command(about = "An Enigma simulator in Rust")]
 #[command(version)]
 struct Cli {
-    /// Startet das CLI-Interface statt der GUI
+    /// Start CLI interface instead of GUI
     #[arg(long)]
     cli: bool,
 
-    /// Verbose Ausgabe aktivieren
+    /// Enable verbose output
     #[arg(short, long)]
     verbose: bool,
 
-    /// Subkommandos
+    /// Subcommands
     #[command(subcommand)]
     command: Option<Commands>,
 }
 
-/// CLI-Subkommandos
+/// CLI subcommands
 #[derive(Subcommand)]
 enum Commands {
-    /// Verschlüsselt einen Text
+    /// Encrypts a text
     Encrypt {
-        /// Der zu verschlüsselnde Text
+        /// The text to encrypt
         text: String,
 
-        /// Rotorpositionen (z.B. "ABC")
+        /// Rotor positions (e.g. "ABC")
         #[arg(short = 'P', long, default_value = "AAA")]
         positions: String,
 
-        /// Ringstellungen (z.B. "ABC")
+        /// Ring settings (e.g. "ABC")
         #[arg(short, long, default_value = "AAA")]
         rings: String,
 
-        /// Steckerbrett-Verbindungen (z.B. "AB CD EF")
+        /// Plugboard connections (e.g. "AB CD EF")
         #[arg(short, long)]
         plugboard: Option<String>,
 
-        /// Rotor-Typen (z.B. "I,II,III")
+        /// Rotor types (e.g. "I,II,III")
         #[arg(short = 'R', long, default_value = "I,II,III")]
         rotors: String,
 
-        /// Reflektor-Typ
+        /// Reflector type
         #[arg(short = 'F', long, default_value = "B")]
         reflector: String,
     },
 
-    /// Entschlüsselt einen Text
+    /// Decrypts a text
     Decrypt {
-        /// Der zu entschlüsselnde Text
+        /// The text to decrypt
         text: String,
 
-        /// Rotorpositionen (z.B. "ABC")
+        /// Rotor positions (e.g. "ABC")
         #[arg(short = 'P', long, default_value = "AAA")]
         positions: String,
 
-        /// Ringstellungen (z.B. "ABC")
+        /// Ring settings (e.g. "ABC")
         #[arg(short, long, default_value = "AAA")]
         rings: String,
 
-        /// Steckerbrett-Verbindungen (z.B. "AB CD EF")
+        /// Plugboard connections (e.g. "AB CD EF")
         #[arg(short, long)]
         plugboard: Option<String>,
 
-        /// Rotor-Typen (z.B. "I,II,III")
+        /// Rotor types (e.g. "I,II,III")
         #[arg(short = 'R', long, default_value = "I,II,III")]
         rotors: String,
 
-        /// Reflektor-Typ
+        /// Reflector type
         #[arg(short = 'F', long, default_value = "B")]
         reflector: String,
     },
 }
 
-/// CLI-Handler für Verschlüsselung
+/// CLI handler for encryption
 fn handle_encrypt(
     text: String,
     positions: String,
@@ -96,7 +96,7 @@ fn handle_encrypt(
     rotors: String,
     reflector: String,
 ) -> Result<(), String> {
-    info!("Starte CLI-Verschlüsselung");
+    info!("Starting CLI encryption");
 
     let rotor_positions = parse_positions(&positions)?;
     let ring_settings = parse_positions(&rings)?;
@@ -112,15 +112,15 @@ fn handle_encrypt(
     )?;
 
     let clean_input = clean_text(&text);
-    info!("Verschlüssele: '{}'", clean_input);
+    info!("Encrypting: '{}'", clean_input);
 
     let result = machine.encrypt(&clean_input);
-    println!("Ergebnis: {}", result);
+    println!("Result: {}", result);
 
     Ok(())
 }
 
-/// CLI-Handler für Entschlüsselung
+/// CLI handler for decryption
 fn handle_decrypt(
     text: String,
     positions: String,
@@ -129,7 +129,7 @@ fn handle_decrypt(
     rotors: String,
     reflector: String,
 ) -> Result<(), String> {
-    info!("Starte CLI-Entschlüsselung");
+    info!("Starting CLI decryption");
 
     let rotor_positions = parse_positions(&positions)?;
     let ring_settings = parse_positions(&rings)?;
@@ -145,47 +145,47 @@ fn handle_decrypt(
     )?;
 
     let clean_input = clean_text(&text);
-    info!("Entschlüssele: '{}'", clean_input);
+    info!("Decrypting: '{}'", clean_input);
 
     let result = machine.decrypt(&clean_input);
-    println!("Ergebnis: {}", result);
+    println!("Result: {}", result);
 
     Ok(())
 }
 
-/// Parst Rotorpositionen aus einem String
+/// Parses rotor positions from a string
 fn parse_positions(positions: &str) -> Result<[char; 3], String> {
     if positions.len() != 3 {
-        return Err("Positions-String muss genau 3 Zeichen lang sein".to_string());
+        return Err("Position string must be exactly 3 characters long".to_string());
     }
 
     let chars: Vec<char> = positions.chars().collect();
     if !chars.iter().all(|&c| c.is_ascii_alphabetic()) {
-        return Err("Positions-String darf nur Buchstaben enthalten".to_string());
+        return Err("Position string may only contain letters".to_string());
     }
 
     Ok([chars[0], chars[1], chars[2]])
 }
 
-/// Parst Rotortypen aus einem String
+/// Parses rotor types from a string
 fn parse_rotors(rotors: &str) -> Result<[&str; 3], String> {
     let parts: Vec<&str> = rotors.split(',').collect();
     if parts.len() != 3 {
-        return Err("Rotor-String muss genau 3 Typen enthalten (durch Komma getrennt)".to_string());
+        return Err("Rotor string must contain exactly 3 types (comma-separated)".to_string());
     }
 
     for &rotor in &parts {
         if !["I", "II", "III", "IV", "V"].contains(&rotor) {
-            return Err(format!("Ungültiger Rotortyp: {}", rotor));
+            return Err(format!("Invalid rotor type: {}", rotor));
         }
     }
 
     Ok([parts[0], parts[1], parts[2]])
 }
 
-/// Startet die GUI-Anwendung
+/// Starts the GUI application
 fn start_gui() -> Result<(), eframe::Error> {
-    info!("Starte GUI-Anwendung");
+    info!("Starting GUI application");
 
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default().with_inner_size([1200.0, 800.0]),
@@ -193,17 +193,17 @@ fn start_gui() -> Result<(), eframe::Error> {
     };
 
     eframe::run_native(
-        "Enigma-Simulator",
+        "Enigma Simulator",
         options,
         Box::new(|_cc| Box::new(gui::EnigmaApp::new())),
     )
 }
 
-/// Hauptfunktion
+/// Main function
 fn main() {
     let cli = Cli::parse();
 
-    // Logger initialisieren
+    // Initialize logger
     let env = Env::default().filter_or("RUST_LOG", if cli.verbose { "debug" } else { "info" });
     Builder::from_env(env)
         .format(|buf, record| {
@@ -218,11 +218,11 @@ fn main() {
         })
         .init();
 
-    info!("Enigma-Simulator gestartet");
+    info!("Enigma simulator started");
 
-    // GUI oder CLI starten
+    // Start GUI or CLI
     if cli.cli || cli.command.is_some() {
-        // CLI-Modus
+        // CLI mode
         match cli.command {
             Some(Commands::Encrypt {
                 text,
@@ -234,7 +234,7 @@ fn main() {
             }) => {
                 if let Err(e) = handle_encrypt(text, positions, rings, plugboard, rotors, reflector)
                 {
-                    error!("Verschlüsselungsfehler: {}", e);
+                    error!("Encryption error: {}", e);
                     std::process::exit(1);
                 }
             }
@@ -248,22 +248,22 @@ fn main() {
             }) => {
                 if let Err(e) = handle_decrypt(text, positions, rings, plugboard, rotors, reflector)
                 {
-                    error!("Entschlüsselungsfehler: {}", e);
+                    error!("Decryption error: {}", e);
                     std::process::exit(1);
                 }
             }
             None => {
-                println!("Kein Kommando angegeben. Verwende --help für Hilfe.");
+                println!("No command specified. Use --help for help.");
                 std::process::exit(1);
             }
         }
     } else {
-        // GUI-Modus (Standard)
+        // GUI mode (default)
         if let Err(e) = start_gui() {
-            error!("GUI-Fehler: {}", e);
+            error!("GUI error: {}", e);
             std::process::exit(1);
         }
     }
 
-    info!("Enigma-Simulator beendet");
+    info!("Enigma simulator ended");
 }

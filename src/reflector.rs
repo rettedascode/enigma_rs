@@ -1,12 +1,12 @@
-//! Reflektor-Implementierung für die Enigma-Maschine
+//! Reflector implementation for the Enigma machine
 //!
-//! Der Reflektor ist ein festes Element, das das Signal zurück zu den Rotoren leitet.
-//! Er implementiert eine feste Permutation des Alphabets.
+//! The reflector is a fixed element that routes the signal back to the rotors.
+//! It implements a fixed permutation of the alphabet.
 
 use crate::utils::{index_to_letter, letter_to_index};
 use log::trace;
 
-/// Repräsentiert den Enigma-Reflektor
+/// Represents the Enigma reflector
 #[derive(Debug, Clone)]
 pub struct Reflector {
     /// Die Verdrahtung des Reflektors
@@ -69,16 +69,16 @@ impl Reflector {
         index_to_letter(output_index).unwrap_or('A')
     }
 
-    /// Überprüft, ob die Verdrahtung eine gültige Permutation ist
+    /// Checks whether the wiring is a valid permutation
     ///
     /// # Arguments
-    /// * `wiring` - Die zu überprüfende Verdrahtung
+    /// * `wiring` - The wiring to check
     ///
     /// # Returns
-    /// * `true` - Wenn es eine gültige Permutation ist
-    /// * `false` - Wenn es keine gültige Permutation ist
+    /// * `true` - If it is a valid permutation
+    /// * `false` - If it is not a valid permutation
     fn is_valid_permutation(wiring: &[usize; 26]) -> bool {
-        // Überprüfe, dass jeder Index genau einmal als Ziel auftritt
+        // Check that each index appears exactly once as a target
         let mut targets = [false; 26];
         for &target in wiring.iter() {
             if target >= 26 {
@@ -90,7 +90,7 @@ impl Reflector {
             targets[target] = true;
         }
 
-        // Überprüfe, dass jeder Index genau einmal als Quelle auftritt
+        // Check that each index appears exactly once as a source
         for i in 0..26 {
             if !targets[i] {
                 return false;
@@ -120,7 +120,7 @@ pub mod reflectors {
         Reflector::new("FVPJIAOYEDRZXWGCTKUQSBNMHL", "C")
     }
 
-    /// Gibt alle verfügbaren Reflektoren zurück
+    /// Returns all available reflectors
     pub fn available_reflectors() -> Vec<(&'static str, fn() -> Result<Reflector, String>)> {
         vec![
             ("A", reflector_a as fn() -> Result<Reflector, String>),

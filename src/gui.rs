@@ -1,7 +1,7 @@
-//! GUI-Implementierung mit egui/eframe für den Enigma-Simulator
+//! GUI implementation with egui/eframe for the Enigma simulator
 //!
-//! Dieses Modul enthält die grafische Benutzeroberfläche mit allen
-//! Konfigurationsmöglichkeiten und einer detaillierten Log-Anzeige.
+//! This module contains the graphical user interface with all
+//! configuration options and detailed log display.
 
 use crate::machine::{factory, EnigmaMachine};
 use crate::utils::clean_text;
@@ -9,10 +9,11 @@ use eframe::egui;
 use log::Level;
 use std::collections::VecDeque;
 
-/// Maximale Anzahl der Log-Einträge in der GUI
+/// Maximum number of log entries in the GUI
 const MAX_LOG_ENTRIES: usize = 1000;
 
-/// Repräsentiert einen Log-Eintrag für die GUI
+/// Represents a log entry for the GUIll
+///
 #[derive(Clone)]
 pub struct LogEntry {
     pub level: Level,
@@ -20,7 +21,7 @@ pub struct LogEntry {
     pub timestamp: chrono::DateTime<chrono::Utc>,
 }
 
-/// Hauptanwendung für die GUI
+/// Main application for the GUI
 pub struct EnigmaApp {
     /// Die Enigma-Maschine
     machine: Option<EnigmaMachine>,
@@ -120,7 +121,7 @@ impl EnigmaApp {
         self.initialize_machine();
     }
 
-    /// Rendert einen schönen Header
+    /// Renders a beautiful header
     fn render_header(&mut self, ui: &mut egui::Ui) {
         ui.vertical_centered(|ui| {
             ui.add_space(10.0);
@@ -139,7 +140,7 @@ impl EnigmaApp {
         });
     }
 
-    /// Generiert zufällige Rotorpositionen
+    /// Generates random rotor positions
     fn generate_random_rotor_positions(&mut self) {
         use rand::Rng;
         let mut rng = rand::thread_rng();
@@ -158,7 +159,7 @@ impl EnigmaApp {
         );
     }
 
-    /// Generiert zufällige Ringstellungen
+    /// Generates random ring settings
     fn generate_random_ring_settings(&mut self) {
         use rand::Rng;
         let mut rng = rand::thread_rng();

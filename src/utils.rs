@@ -1,16 +1,16 @@
-//! Hilfsfunktionen für den Enigma-Simulator
+//! Utility functions for the Enigma simulator
 //!
-//! Dieses Modul enthält verschiedene Utility-Funktionen für die Enigma-Maschine,
-//! wie z.B. Alphabet-Konvertierung und Validierung.
+//! This module contains various utility functions for the Enigma machine,
+//! such as alphabet conversion and validation.
 
-/// Konvertiert einen Buchstaben (A-Z) zu einem Index (0-25)
+/// Converts a letter (A-Z) to an index (0-25)
 ///
 /// # Arguments
-/// * `letter` - Der Buchstabe (A-Z)
+/// * `letter` - The letter (A-Z)
 ///
 /// # Returns
-/// * `Some(index)` - Der entsprechende Index (0-25)
-/// * `None` - Wenn der Buchstabe ungültig ist
+/// * `Some(index)` - The corresponding index (0-25)
+/// * `None` - If the letter is invalid
 pub fn letter_to_index(letter: char) -> Option<usize> {
     if letter.is_ascii_alphabetic() {
         Some((letter.to_ascii_uppercase() as u8 - b'A') as usize)
@@ -19,14 +19,14 @@ pub fn letter_to_index(letter: char) -> Option<usize> {
     }
 }
 
-/// Konvertiert einen Index (0-25) zu einem Buchstaben (A-Z)
+/// Converts an index (0-25) to a letter (A-Z)
 ///
 /// # Arguments
-/// * `index` - Der Index (0-25)
+/// * `index` - The index (0-25)
 ///
 /// # Returns
-/// * `Some(letter)` - Der entsprechende Buchstabe (A-Z)
-/// * `None` - Wenn der Index ungültig ist
+/// * `Some(letter)` - The corresponding letter (A-Z)
+/// * `None` - If the index is invalid
 pub fn index_to_letter(index: usize) -> Option<char> {
     if index < 26 {
         Some((b'A' + index as u8) as char)
@@ -35,26 +35,26 @@ pub fn index_to_letter(index: usize) -> Option<char> {
     }
 }
 
-/// Validiert einen Text, um sicherzustellen, dass er nur gültige Buchstaben enthält
+/// Validates text to ensure it only contains valid letters
 ///
 /// # Arguments
-/// * `text` - Der zu validierende Text
+/// * `text` - The text to validate
 ///
 /// # Returns
-/// * `true` - Wenn der Text nur Buchstaben enthält
-/// * `false` - Wenn der Text ungültige Zeichen enthält
+/// * `true` - If the text only contains letters
+/// * `false` - If the text contains invalid characters
 pub fn is_valid_text(text: &str) -> bool {
     text.chars()
         .all(|c| c.is_ascii_alphabetic() || c.is_whitespace())
 }
 
-/// Bereinigt einen Text, indem nur Buchstaben beibehalten werden
+/// Cleans text by keeping only letters
 ///
 /// # Arguments
-/// * `text` - Der zu bereinigende Text
+/// * `text` - The text to clean
 ///
 /// # Returns
-/// * Der bereinigte Text (nur Buchstaben, in Großbuchstaben)
+/// * The cleaned text (only letters, in uppercase)
 pub fn clean_text(text: &str) -> String {
     text.chars()
         .filter(|c| c.is_ascii_alphabetic())
@@ -62,10 +62,10 @@ pub fn clean_text(text: &str) -> String {
         .collect()
 }
 
-/// Erstellt einen zufälligen Schlüssel für das Steckerbrett
+/// Creates a random key for the plugboard
 ///
 /// # Returns
-/// * Ein String mit zufällig verbundenen Buchstabenpaaren
+/// * A string with randomly connected letter pairs
 pub fn generate_random_plugboard() -> String {
     use rand::Rng;
     use std::collections::HashSet;

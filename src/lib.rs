@@ -1,8 +1,8 @@
-//! Enigma-Simulator Library
+//! Enigma Simulator Library
 //!
-//! Diese Library enthält alle Module für den Enigma-Simulator
-//! und ermöglicht es, die Funktionalität in Tests und anderen
-//! Anwendungen zu verwenden.
+//! This library contains all modules for the Enigma simulator
+//! and allows using the functionality in tests and other
+//! applications.
 
 pub mod gui;
 pub mod machine;

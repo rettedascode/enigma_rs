@@ -1,12 +1,12 @@
-//! Steckerbrett-Implementierung für die Enigma-Maschine
+//! Plugboard implementation for the Enigma machine
 //!
-//! Das Steckerbrett ermöglicht das Vertauschen von Buchstabenpaaren vor und nach
-//! der Verarbeitung durch die Rotoren.
+//! The plugboard allows swapping letter pairs before and after
+//! processing by the rotors.
 
 use crate::utils::{index_to_letter, letter_to_index};
 use log::trace;
 
-/// Repräsentiert das Enigma-Steckerbrett
+/// Represents the Enigma plugboard
 #[derive(Debug, Clone)]
 pub struct Plugboard {
     /// Die Verbindungen des Steckerbretts (jeder Index zeigt auf den verbundenen Buchstaben)
@@ -66,7 +66,7 @@ impl Plugboard {
         Ok(plugboard)
     }
 
-    /// Fügt eine Verbindung zwischen zwei Buchstaben hinzu
+    /// Adds a connection between two letters
     ///
     /// # Arguments
     /// * `first` - Der erste Buchstabe
@@ -84,7 +84,7 @@ impl Plugboard {
         let second_index =
             letter_to_index(second).ok_or_else(|| format!("Ungültiger Buchstabe: {}", second))?;
 
-        // Überprüfe, ob einer der Buchstaben bereits verbunden ist
+        // Check if either letter is already connected
         if self.connections[first_index].is_some() {
             return Err(format!("Buchstabe {} ist bereits verbunden", first));
         }
@@ -92,7 +92,7 @@ impl Plugboard {
             return Err(format!("Buchstabe {} ist bereits verbunden", second));
         }
 
-        // Füge die Verbindung hinzu
+        // Add the connection
         self.connections[first_index] = Some(second_index);
         self.connections[second_index] = Some(first_index);
         self.connection_count += 1;
@@ -149,7 +149,7 @@ impl Plugboard {
         }
     }
 
-    /// Gibt alle aktiven Verbindungen als String zurück
+    /// Returns all active connections as a string
     ///
     /// # Returns
     /// * String mit allen Verbindungen (z.B. "AB CD EF")
@@ -172,7 +172,7 @@ impl Plugboard {
         connections.join(" ")
     }
 
-    /// Gibt die Anzahl der aktiven Verbindungen zurück
+    /// Returns the number of active connections
     ///
     /// # Returns
     /// * Die Anzahl der Verbindungen
@@ -180,10 +180,10 @@ impl Plugboard {
         self.connection_count
     }
 
-    /// Überprüft, ob ein Buchstabe verbunden ist
+    /// Checks if a letter is connected
     ///
     /// # Arguments
-    /// * `letter` - Der zu überprüfende Buchstabe
+    /// * `letter` - The letter to check
     ///
     /// # Returns
     /// * `true` - Wenn der Buchstabe verbunden ist
@@ -196,7 +196,7 @@ impl Plugboard {
         }
     }
 
-    /// Löscht alle Verbindungen
+    /// Clears all connections
     pub fn clear(&mut self) {
         self.connections = [None; 26];
         self.connection_count = 0;
