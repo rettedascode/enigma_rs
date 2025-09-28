@@ -1,104 +1,98 @@
-//! Tests für den Enigma-Simulator
-//!
-//! Diese Tests überprüfen die grundlegende Funktionalität der Enigma-Maschine,
-//! insbesondere die Symmetrie von Verschlüsselung und Entschlüsselung.
-
-use enigma_rs::machine::{factory, EnigmaMachine};
+use enigma_rs::machine::factory;
 use enigma_rs::utils::clean_text;
 
-/// Testet die grundlegende Verschlüsselung und Entschlüsselung
 #[test]
 fn test_encrypt_decrypt_symmetry() {
-    // Erstelle eine Standard-Enigma-Maschine
+    // Create a standard Enigma machine
     let mut machine = factory::create_standard_machine(
-        ['A', 'A', 'A'], // Positionen
-        ['A', 'A', 'A'], // Ringstellungen
-        "AB CD EF",      // Steckerbrett
+        ['A', 'A', 'A'], // Positions
+        ['A', 'A', 'A'], // Ring settings
+        "AB CD EF",      // Plugboard
     )
-    .expect("Maschine sollte erstellt werden können");
+    .expect("Machine should be creatable");
 
     let original_text = "HELLO WORLD";
     let clean_original = clean_text(&original_text);
 
-    // Verschlüssele den Text
+    // Encrypt the text
     let encrypted = machine.encrypt(&clean_original);
 
-    // Setze die Maschine zurück auf die ursprünglichen Positionen
+    // Reset the machine to the original positions
     machine.set_rotor_positions(['A', 'A', 'A']);
 
-    // Entschlüssele den Text
+    // Decrypt the text
     let decrypted = machine.decrypt(&encrypted);
 
-    // Der entschlüsselte Text sollte dem ursprünglichen entsprechen
+    // The decrypted text should match the original
     assert_eq!(clean_text(&decrypted), clean_original);
 }
 
-/// Testet verschiedene Rotorpositionen
+/// Tests different rotor positions
 #[test]
 fn test_different_positions() {
     let mut machine = factory::create_standard_machine(
-        ['B', 'C', 'D'], // Verschiedene Positionen
-        ['A', 'A', 'A'], // Ringstellungen
-        "",              // Kein Steckerbrett
+        ['B', 'C', 'D'], // Different positions
+        ['A', 'A', 'A'], // Ring settings
+        "",              // No plugboard
     )
-    .expect("Maschine sollte erstellt werden können");
+    .expect("Machine should be creatable");
 
     let text = "TEST";
     let encrypted = machine.encrypt(text);
 
-    // Setze zurück
+    // Reset
     machine.set_rotor_positions(['B', 'C', 'D']);
 
     let decrypted = machine.decrypt(&encrypted);
     assert_eq!(clean_text(&decrypted), clean_text(text));
 }
 
-/// Testet verschiedene Ringstellungen
+/// Tests different ring settings
 #[test]
 fn test_different_ring_settings() {
     let mut machine = factory::create_standard_machine(
-        ['A', 'A', 'A'], // Positionen
-        ['B', 'C', 'D'], // Verschiedene Ringstellungen
-        "",              // Kein Steckerbrett
+        ['A', 'A', 'A'], // Positions
+        ['B', 'C', 'D'], // Different ring settings
+        "",              // No plugboard
     )
-    .expect("Maschine sollte erstellt werden können");
+    .expect("Machine should be creatable");
 
     let text = "ENIGMA";
     let encrypted = machine.encrypt(text);
 
-    // Setze zurück
+    // Reset
     machine.set_rotor_positions(['A', 'A', 'A']);
 
     let decrypted = machine.decrypt(&encrypted);
     assert_eq!(clean_text(&decrypted), clean_text(text));
 }
 
-/// Testet verschiedene Rotortypen
+/// Tests different rotor types
 #[test]
 fn test_different_rotor_types() {
     let mut machine = factory::create_custom_machine(
-        ["II", "IV", "V"], // Verschiedene Rotortypen
-        ['A', 'A', 'A'],   // Positionen
-        ['A', 'A', 'A'],   // Ringstellungen
-        "B",               // Reflektor
-        "",                // Kein Steckerbrett
+        ["II", "IV", "V"], // Different rotor types
+        ['A', 'A', 'A'],   // Positions
+        ['A', 'A', 'A'],   // Ring settings
+        "B",               // Reflector
+        "",                // No plugboard
     )
-    .expect("Maschine sollte erstellt werden können");
+    .expect("Machine should be creatable");
 
     let text = "ROTORS";
     let encrypted = machine.encrypt(text);
 
-    // Setze zurück
+    // Reset
     machine.set_rotor_positions(['A', 'A', 'A']);
 
     let decrypted = machine.decrypt(&encrypted);
     assert_eq!(clean_text(&decrypted), clean_text(text));
 }
 
-/// Testet verschiedene Reflektoren
+/// Tests different reflectors
 #[test]
 fn test_different_reflectors() {
-    // Teste Reflektor A
+    // Test reflector A
     let mut machine_a = factory::create_custom_machine(
         ["I", "II", "III"],
         ['A', 'A', 'A'],
@@ -106,12 +100,12 @@ fn test_different_reflectors() {
         "A",
         "",
     )
-    .expect("Maschine sollte erstellt werden können");
+    .expect("Machine should be creatable");
 
     let text = "REFLECTOR";
     let encrypted_a = machine_a.encrypt(text);
 
-    // Teste Reflektor B
+    // Test reflector B
     let mut machine_b = factory::create_custom_machine(
         ["I", "II", "III"],
         ['A', 'A', 'A'],
@@ -119,14 +113,14 @@ fn test_different_reflectors() {
         "B",
         "",
     )
-    .expect("Maschine sollte erstellt werden können");
+    .expect("Machine should be creatable");
 
     let encrypted_b = machine_b.encrypt(text);
 
-    // Verschiedene Reflektoren sollten verschiedene Ergebnisse liefern
+    // Different reflectors should produce different results
     assert_ne!(encrypted_a, encrypted_b);
 
-    // Aber beide sollten symmetrisch sein
+    // But both should be symmetric
     machine_a.set_rotor_positions(['A', 'A', 'A']);
     machine_b.set_rotor_positions(['A', 'A', 'A']);
 
@@ -137,68 +131,68 @@ fn test_different_reflectors() {
     assert_eq!(clean_text(&decrypted_b), clean_text(text));
 }
 
-/// Testet das Steckerbrett
+/// Tests the plugboard
 #[test]
 fn test_plugboard() {
     let mut machine = factory::create_standard_machine(
         ['A', 'A', 'A'],
         ['A', 'A', 'A'],
-        "AB CD EF", // Steckerbrett-Verbindungen
+        "AB CD EF", // Plugboard-Verbindungen
     )
-    .expect("Maschine sollte erstellt werden können");
+    .expect("Machine should be creatable");
 
     let text = "PLUGBOARD";
     let encrypted = machine.encrypt(text);
 
-    // Setze zurück
+    // Reset
     machine.set_rotor_positions(['A', 'A', 'A']);
 
     let decrypted = machine.decrypt(&encrypted);
     assert_eq!(clean_text(&decrypted), clean_text(text));
 }
 
-/// Testet längere Texte
+/// Tests longer texts
 #[test]
 fn test_longer_text() {
     let mut machine =
         factory::create_standard_machine(['A', 'A', 'A'], ['A', 'A', 'A'], "AB CD EF GH IJ")
-            .expect("Maschine sollte erstellt werden können");
+            .expect("Machine should be creatable");
 
     let long_text = "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG";
     let encrypted = machine.encrypt(long_text);
 
-    // Setze zurück
+    // Reset
     machine.set_rotor_positions(['A', 'A', 'A']);
 
     let decrypted = machine.decrypt(&encrypted);
     assert_eq!(clean_text(&decrypted), clean_text(long_text));
 }
 
-/// Testet die Rotor-Drehung
+/// Tests rotor stepping
 #[test]
 fn test_rotor_stepping() {
     let mut machine = factory::create_standard_machine(['A', 'A', 'A'], ['A', 'A', 'A'], "")
-        .expect("Maschine sollte erstellt werden können");
+        .expect("Machine should be creatable");
 
     let char1 = machine.encrypt_char('A');
     let char2 = machine.encrypt_char('A');
 
-    // Gleiche Eingabe sollte nach Rotor-Drehung verschiedene Ausgaben liefern
+    // Same input should produce different outputs after rotor stepping
     assert_ne!(char1, char2);
 }
 
-/// Testet die Konfigurationsinformationen
+/// Tests configuration information
 #[test]
 fn test_configuration_info() {
     let machine = factory::create_standard_machine(['B', 'C', 'D'], ['E', 'F', 'G'], "AB CD")
-        .expect("Maschine sollte erstellt werden können");
+        .expect("Machine should be creatable");
 
     let config = machine.get_configuration_info();
 
-    // Überprüfe, dass alle wichtigen Informationen enthalten sind
-    assert!(config.contains("I II III")); // Rotortypen
-    assert!(config.contains("E F G")); // Ringstellungen
-    assert!(config.contains("B C D")); // Positionen
-    assert!(config.contains("B")); // Reflektor
-    assert!(config.contains("AB CD")); // Steckerbrett
+    // Check that all important information is included
+    assert!(config.contains("I II III")); // Rotor types
+    assert!(config.contains("E F G")); // Ring settings
+    assert!(config.contains("B C D")); // Positions
+    assert!(config.contains("B")); // Reflector
+    assert!(config.contains("AB CD")); // Plugboard
 }
